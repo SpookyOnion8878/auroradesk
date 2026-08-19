@@ -1,0 +1,293 @@
+@import 'tailwindcss';
+@import 'tw-animate-css';
+
+@custom-variant dark (&:is(.dark *));
+
+/* Dark-first: token default = dark theme, .light = overrides (lihat ThemeToggle) */
+:root {
+	--background: oklch(0.145 0 0);
+	--foreground: oklch(0.985 0 0);
+	--card: oklch(0.19 0 0);
+	--card-foreground: oklch(0.985 0 0);
+	--popover: oklch(0.21 0 0);
+	--popover-foreground: oklch(0.985 0 0);
+	--primary: oklch(0.922 0 0);
+	--primary-foreground: oklch(0.205 0 0);
+	--secondary: oklch(0.269 0 0);
+	--secondary-foreground: oklch(0.985 0 0);
+	--muted: oklch(0.269 0 0);
+	--muted-foreground: oklch(0.708 0 0);
+	--accent: oklch(0.269 0 0);
+	--accent-foreground: oklch(0.985 0 0);
+	--destructive: oklch(0.704 0.191 22.216);
+	--destructive-foreground: oklch(0.985 0 0);
+	--border: oklch(1 0 0 / 10%);
+	--input: oklch(1 0 0 / 15%);
+	--ring: oklch(0.556 0 0);
+	--radius: 0.75rem;
+
+	/* Luxury palette: deep violet + champagne gold */
+	--brand: #7c3aed;
+	--brand-2: #4c1d95;
+	--accent: #d4af37;
+	--gold: #d4af37;
+	--gold-2: #f4e3a3;
+	--gold-rgb: 212 175 55;
+}
+
+.light {
+	--background: oklch(0.985 0 0);
+	--foreground: oklch(0.145 0 0);
+	--card: oklch(1 0 0);
+	--card-foreground: oklch(0.145 0 0);
+	--popover: oklch(1 0 0);
+	--popover-foreground: oklch(0.145 0 0);
+	--primary: oklch(0.205 0 0);
+	--primary-foreground: oklch(0.985 0 0);
+	--secondary: oklch(0.97 0 0);
+	--secondary-foreground: oklch(0.205 0 0);
+	--muted: oklch(0.97 0 0);
+	--muted-foreground: oklch(0.556 0 0);
+	--accent: oklch(0.97 0 0);
+	--accent-foreground: oklch(0.205 0 0);
+	--destructive: oklch(0.577 0.245 27.325);
+	--destructive-foreground: oklch(0.985 0 0);
+	--border: oklch(0.922 0 0);
+	--input: oklch(0.922 0 0);
+	--ring: oklch(0.708 0 0);
+}
+
+@theme inline {
+	--color-brand: var(--brand);
+	--color-brand-2: var(--brand-2);
+	--color-accent: var(--accent);
+	--color-brand-foreground: #ffffff;
+
+	--color-background: var(--background);
+	--color-foreground: var(--foreground);
+	--color-card: var(--card);
+	--color-card-foreground: var(--card-foreground);
+	--color-popover: var(--popover);
+	--color-popover-foreground: var(--popover-foreground);
+	--color-primary: var(--primary);
+	--color-primary-foreground: var(--primary-foreground);
+	--color-secondary: var(--secondary);
+	--color-secondary-foreground: var(--secondary-foreground);
+	--color-muted: var(--muted);
+	--color-muted-foreground: var(--muted-foreground);
+	--color-accent: var(--accent);
+	--color-accent-foreground: var(--accent-foreground);
+	--color-destructive: var(--destructive);
+	--color-destructive-foreground: var(--destructive-foreground);
+	--color-border: var(--border);
+	--color-input: var(--input);
+	--color-ring: var(--ring);
+	--radius-sm: calc(var(--radius) - 4px);
+	--radius-md: calc(var(--radius) - 2px);
+	--radius-lg: var(--radius);
+	--radius-xl: calc(var(--radius) + 4px);
+}
+
+@layer base {
+	* {
+		@apply border-border outline-ring/50;
+	}
+	html {
+		color-scheme: dark;
+		scroll-behavior: smooth;
+	}
+	.light {
+		color-scheme: light;
+	}
+	.light.aurora::before {
+		opacity: 0.55;
+		filter: blur(28px) saturate(120%);
+	}
+	.light.aurora::after {
+		opacity: 0.5;
+	}
+	body {
+		@apply bg-background text-foreground antialiased;
+		overflow-x: hidden;
+		width: 100%;
+	}
+
+	/* Scrollbar kustom (purple glass) — desktop */
+	@media (min-width: 769px) {
+		* {
+			scrollbar-width: thin;
+			scrollbar-color: rgba(168, 85, 247, 0.3) rgba(255, 255, 255, 0.03);
+		}
+		*::-webkit-scrollbar {
+			width: 8px;
+			height: 8px;
+		}
+		*::-webkit-scrollbar-track {
+			background: rgba(255, 255, 255, 0.03);
+			border-radius: 4px;
+		}
+		*::-webkit-scrollbar-thumb {
+			background: linear-gradient(180deg, rgba(168, 85, 247, 0.4), rgba(147, 51, 234, 0.3));
+			border-radius: 4px;
+			border: 1px solid rgba(255, 255, 255, 0.05);
+		}
+		*::-webkit-scrollbar-thumb:hover {
+			background: linear-gradient(180deg, rgba(168, 85, 247, 0.6), rgba(147, 51, 234, 0.5));
+		}
+	}
+	@media (max-width: 768px) {
+		* {
+			scrollbar-width: none;
+			-ms-overflow-style: none;
+		}
+		*::-webkit-scrollbar {
+			display: none;
+		}
+	}
+}
+
+@layer utilities {
+	.scrollbar-hide {
+		-ms-overflow-style: none;
+		scrollbar-width: none;
+	}
+	.scrollbar-hide::-webkit-scrollbar {
+		display: none;
+	}
+
+	/* Ambient futuristic backdrop: aurora blobs + faint grid */
+	.aurora::before {
+		content: '';
+		position: fixed;
+		inset: -20% -10% auto -10%;
+		height: 120vh;
+		z-index: -2;
+		pointer-events: none;
+		background:
+			radial-gradient(
+				50rem 34rem at 6% -10%,
+				color-mix(in oklch, var(--gold) 22%, transparent),
+				transparent 60%
+			),
+			radial-gradient(
+				46rem 36rem at 98% -6%,
+				color-mix(in oklch, var(--brand) 24%, transparent),
+				transparent 55%
+			),
+			radial-gradient(
+				44rem 40rem at 72% 112%,
+				color-mix(in oklch, var(--brand-2) 20%, transparent),
+				transparent 60%
+			);
+		filter: blur(24px);
+		animation: aurora 26s ease-in-out infinite;
+	}
+	.aurora::after {
+		content: '';
+		position: fixed;
+		inset: 0;
+		z-index: -2;
+		pointer-events: none;
+		background-image:
+			linear-gradient(to right, color-mix(in oklch, white 5%, transparent) 1px, transparent 1px),
+			linear-gradient(to bottom, color-mix(in oklch, white 5%, transparent) 1px, transparent 1px);
+		background-size: 56px 56px;
+		opacity: 0.35;
+		-webkit-mask-image: radial-gradient(ellipse 80% 60% at 50% 0%, #000 30%, transparent 80%);
+		mask-image: radial-gradient(ellipse 80% 60% at 50% 0%, #000 30%, transparent 80%);
+	}
+
+	/* Glass surface */
+	.glass {
+		background: color-mix(in oklch, var(--card) 68%, transparent);
+		backdrop-filter: blur(14px) saturate(140%);
+		-webkit-backdrop-filter: blur(14px) saturate(140%);
+		border-color: color-mix(in oklch, var(--border) 70%, transparent);
+	}
+
+	/* Interactive card: lift + brand glow on hover */
+	.card-hover {
+		transition:
+			transform 0.28s cubic-bezier(0.22, 1, 0.36, 1),
+			box-shadow 0.28s ease,
+			border-color 0.28s ease;
+	}
+	.card-hover:hover {
+		transform: translateY(-4px);
+		border-color: color-mix(in oklch, var(--gold) 42%, transparent);
+		box-shadow:
+			0 18px 50px -18px color-mix(in oklch, var(--gold) 45%, transparent),
+			0 0 0 1px color-mix(in oklch, var(--gold) 18%, transparent);
+	}
+
+	/* Gradient text — champagne gold */
+	.text-gradient {
+		background: linear-gradient(120deg, var(--gold-2), var(--gold) 55%, #b8860b);
+		-webkit-background-clip: text;
+		background-clip: text;
+		color: transparent;
+	}
+
+	/* Gradient hairline accent (section eyebrow) */
+	.accent-bar {
+		width: 2.25rem;
+		height: 0.2rem;
+		border-radius: 9999px;
+		background: linear-gradient(90deg, var(--gold-2), var(--gold));
+	}
+
+	/* Elegant serif display */
+	.font-display {
+		font-family: ui-serif, Georgia, 'Times New Roman', serif;
+	}
+
+	/* Animated gold button */
+	.btn-gradient {
+		background-image: linear-gradient(120deg, #e6c66e, var(--gold) 50%, #b8860b);
+		background-size: 180% 180%;
+		color: #1c1408;
+		font-weight: 600;
+		box-shadow: 0 10px 30px -10px color-mix(in oklch, var(--gold) 70%, transparent);
+		animation: shimmer 7s ease infinite;
+	}
+	.btn-gradient:hover {
+		box-shadow: 0 14px 38px -8px color-mix(in oklch, var(--gold) 85%, transparent);
+	}
+
+	@keyframes aurora {
+		0%,
+		100% {
+			transform: translate3d(0, 0, 0) scale(1);
+		}
+		50% {
+			transform: translate3d(0, -2.5%, 0) scale(1.05);
+		}
+	}
+	@keyframes shimmer {
+		0%,
+		100% {
+			background-position: 0% 50%;
+		}
+		50% {
+			background-position: 100% 50%;
+		}
+	}
+	@keyframes float {
+		0%,
+		100% {
+			transform: translateY(0);
+		}
+		50% {
+			transform: translateY(-6px);
+		}
+	}
+	@keyframes glow-pulse {
+		0%,
+		100% {
+			box-shadow: 0 0 0 0 color-mix(in oklch, var(--brand) 45%, transparent);
+		}
+		50% {
+			box-shadow: 0 0 22px 2px color-mix(in oklch, var(--brand) 40%, transparent);
+		}
+	}
+}
