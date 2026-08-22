@@ -1,9 +1,16 @@
 import { mkdirSync } from 'node:fs';
 import { dirname, join } from 'node:path';
 import Database from 'better-sqlite3';
+import { seedDemoData } from './seed';
 
-/** Override via env DB_PATH (misal ':memory:' untuk test). Default: file di root project. */
-export const DB_PATH = process.env.DB_PATH || join(process.cwd(), 'auroradesk.db');
+/**
+ * Override via env DB_PATH (misal ':memory:' untuk test).
+ * Default: file di root project — KECUALI di Vercel, di mana filesystem read-only
+ * sehingga DB harus ditulis ke /tmp (ephemeral, per-instance).
+ */
+export const DB_PATH =
+	process.env.DB_PATH ||
+	(process.env.VERCEL ? '/tmp/auroradesk.db' : join(process.cwd(), 'auroradesk.db'));
 
 if (DB_PATH !== ':memory:') {
 	mkdirSync(dirname(DB_PATH), { recursive: true });
@@ -61,4 +68,12 @@ CREATE INDEX IF NOT EXISTS idx_history_order      ON order_status_history(order_
 
 export function closeDb(): void {
 	db.close();
+}
+
+// Seed demo data otomatis saat boot (idempoten — hanya jika tabel kosong).
+// Di Vercel ini berjalan per cold-start instance sehingga data demo selalu tersedia.
+try {
+	seedDemoData();
+} catch (err) {
+	console.error('[auroradesk] auto-seed gagal:', err);
 }
